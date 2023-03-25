@@ -1,0 +1,24 @@
+["CustomerID;Country"] - Cliente
+["InvoiceNo;InvoiceDate;CustomerID"] - Fatura
+["InvoiceNo;StockCode;Quantity;UnitPrice"] - Fatura_Detalhe
+["StockCode;Description;UnitPrice"] - Produtos
+
+----Create
+LOAD CSV WITH HEADERS FROM 'file:///data.csv' AS produto
+CREATE (p:Produtos)
+SET p.StockCode = produto.StockCode
+	, p.Description = produto.Description
+	, p.UnitPrice = produto.UnitPrice;
+
+LOAD CSV WITH HEADERS FROM 'file:///data.csv' AS cliente
+CREATE (c:Cliente)
+SET c.CustomerID = toInteger(cliente.CustomerID)
+	, c.Country = cliente.Country;
+
+
+LOAD CSV WITH HEADERS FROM 'file:///data.csv' AS fatura
+CREATE (f:Fatura)
+SET f.InvoiceNo = toInteger(fatura.InvoiceNo)
+	, f.InvoiceDate = fatura.InvoiceDate
+	, f.CustomerID = toInteger(fatura.CustomerID);
+
